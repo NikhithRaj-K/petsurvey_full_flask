@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PetReg-Adimn_SignIn</title>
+    <link href="{{ url_for('static', filename='CSS/styles.css') }}" rel="stylesheet" />
+    <style>
+        :root {
+                --background: #231F20;
+                --color: #FFF;
+                --primary-color: #BB4430;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+        }
+    </style>
+    <!--resource: https://codepen.io/hicoders/pen/eYdwVmb-->
+</head>
+    <body>
+        <section class="container">
+            <div class="login-container">
+                <div class="circle circle-one"></div>
+                <div class="form-container">
+
+                    <h1 class="opacity">ADMIN LOGIN</h1>
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                    {% for message in messages %}
+                    <p>{{ message }}</p>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+
+                    <form method="post">
+                        <input type="text" placeholder="EMAIL" name="email" />
+                        <input type="password" placeholder="PASSWORD" name="password" />
+                        <button class="opacity" type="submit">SUBMIT</button>
+                    </form>
+
+                    <div class="register-forget opacity">
+<!--                        <a href="{{ url_for('signup') }}">SIGNUP</a>-->
+<!--                        <a href="">FORGOT PASSWORD?</a>-->
+                    </div>
+                </div>
+                <div class="circle circle-two"></div>
+            </div>
+            <div class="theme-btn-container"></div>
+        </section>
+<!--        <script src="static/js/signup.js"></script>-->
+    </body>
+
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PetReg-Home</title>
+    <style>
+        .submit-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* #flash-container .alert {*/
+        /*    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);*/
+        /*    border-radius: 10px;*/
+        /*    min-width: 250px;*/
+        /*}*/
+        #flash-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1050;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none; /* Allows clicks through the container if needed */
+          }
+
+        .flash-message {
+            pointer-events: auto;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+          }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+<!--    <link href="static/css/home_styles.css" rel="stylesheet" type="text/css" />-->
+</head>
+    <body>
+
+        <header class="p-3 text-bg-dark">
+            <div class="container">
+                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                    <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                        <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+                            <use xlink:href="#bootstrap"></use>
+                        </svg>
+                    </a>
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li><a href="{{ url_for('home') }}" class="nav-link px-2 text-white">Home</a></li>
+                    </ul>
+                    <div class="text-end">
+                        <a type="button" class="btn btn-warning" href="{{ url_for('logout') }}">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw d-flex flex-wrap align-items-center justify-content-center">Pet Owner and Brand Survey</h1>
+                <h3 class="fw d-flex flex-wrap align-items-center justify-content-center">Hi {{ name }}, please take the survey. Thankyou.</h3>
+
+            </div>
+        </div>
+
+
+        <div class="container">
+            <!-- Form Submission Flash Message Container -->
+                <div id="flash-container">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message alert alert-{{ category }}">
+                        {{ message }}
+                        </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+                </div>
+            <form method="POST" action="{{ url_for('home') }}" onsubmit="return validateCheckboxGroup();">
+                <h4>How long have you owned pets? <span style="color:red">*</span></h4>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer1" value="less than 1 year" id="radioDefault1" required="required">
+                        <label class="form-check-label" for="radioDefault1">Less than 1 year</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer1" value="1-3 years" id="radioDefault2">
+                        <label class="form-check-label" for="radioDefault2">1-3 years</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer1" value="3-5 years" id="radioDefault3">
+                        <label class="form-check-label" for="radioDefault3">3-5 years</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer1" value="5+ years" id="radioDefault4">
+                        <label class="form-check-label" for="radioDefault4">5+ years</label>
+                    </div>
+                    <hr class="my-4">
+                <div id="group1">
+                <h4>What types of pets do you own? (Select all that apply) <span style="color:red">*</span></h4>
+                <div class="question-description"><h5>something specify please do write in the given black</h5></div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer2" value="Dog" id="checkDefault1">
+                            <label class="form-check-label" for="checkDefault1">Dog</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer2" value="Cat" id="checkDefault2">
+                            <label class="form-check-label" for="checkDefault2">Cat</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer2" value="Bird" id="checkDefault3">
+                            <label class="form-check-label" for="checkDefault3">Bird</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer2" value="Fish" id="checkDefault4">
+                            <label class="form-check-label" for="checkDefault4">Fish</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer2" value="Reptile" id="checkDefault5">
+                            <label class="form-check-label" for="checkDefault5">Reptile</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer2" value="Others" id="defaultCheck6">
+                        <label class="form-check-label " for="defaultCheck6"> Others </label>
+                        <label for="other_q2_input"></label><input class="form-control form-control-sm ml-3 w-50" type="text" name="other_q2" placeholder="Your answer" id="other_q2_input" style="display: none;" disabled>
+                    </div>
+                </div>
+<!--                    <p id="error" style="color:red; display:none;">Please select at least one option for Checkbox.</p>-->
+                    <hr class="my-4">
+
+                <h4>How often do you use social media to engage with other pet owners? <span style="color:red">*</span></h4>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer3" value="Daily" id="radioDefault7" required="required">
+                        <label class="form-check-label" for="radioDefault7">Daily</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer3" value="Weekly" id="radioDefault8">
+                        <label class="form-check-label" for="radioDefault8">Weekly</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer3" value="Monthly" id="radioDefault9">
+                        <label class="form-check-label" for="radioDefault9">Monthly</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer3" value="Rarely" id="radioDefault10">
+                        <label class="form-check-label" for="radioDefault10">Rarely</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer3" value="Never" id="radioDefault11">
+                        <label class="form-check-label" for="radioDefault11">Never</label>
+                    </div>
+                    <hr class="my-4">
+
+                <h4>Do you follow any pet-related accounts on social media? (If yes, please specify which platforms you use most often) <span style="color:red">*</span></h4>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer4" value="Yes" id="radioDefault12" required="required">
+                        <label class="form-check-label" for="radioDefault12">Yes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer4" value="No" id="radioDefault13">
+                        <label class="form-check-label" for="radioDefault13">No</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer4" value="Others" id="radioDefault14">
+                        <label class="form-check-label" for="radioDefault14"> Others </label>
+                        <label for="other_q4_input"></label><input class="form-control form-control-sm ml-3 w-50" type="text" name="other_q4" placeholder="Your answer" id="other_q4_input" style="display: none;" disabled>
+                    </div>
+                    <hr class="my-4">
+
+                <div id="group2">
+                <h4>What challenges do you face when looking for pet care information online? (Select all that apply) <span style="color:red">*</span></h4>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer5" value="Too much conflicting information" id="checkDefault15">
+                            <label class="form-check-label" for="checkDefault15">Too much conflicting information</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer5" value="Difficulty finding trustworthy advice" id="checkDefault16">
+                            <label class="form-check-label" for="checkDefault16">Difficulty finding trustworthy advice</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer5" value="Lack of pet-specific resources" id="checkDefault17">
+                            <label class="form-check-label" for="checkDefault17">Lack of pet-specific resources</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer5" value="Overwhelming amount of content" id="checkDefault18">
+                            <label class="form-check-label" for="checkDefault18">Overwhelming amount of content</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer5" value="Others" id="defaultCheck19">
+                        <label class="form-check-label " for="defaultCheck19"> Others </label>
+                        <label for="other_q5_input"></label><input class="form-control form-control-sm ml-3 w-50" type="text" name="other_q5" placeholder="Your answer" id="other_q5_input" style="display: none;" disabled>
+                    </div>
+                </div>
+                    <hr class="my-4">
+
+                <h4>How do you currently find local services for your pets (e.g., vet clinics, groomers, pet-friendly cafes)? <span style="color:red">*</span></h4>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer6" value="Online search (Google)" id="radioDefault20" required="required">
+                        <label class="form-check-label" for="radioDefault20">Online search (Google)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer6" value="Social media platforms" id="radioDefault21">
+                        <label class="form-check-label" for="radioDefault21">Social media platforms</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer6" value="Word of mouth" id="radioDefault22">
+                        <label class="form-check-label" for="radioDefault22">Word of mouth</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer6" value="Others" id="radioDefault23">
+                        <label class="form-check-label" for="radioDefault23"> Others </label>
+                        <label for="other_q6_input"></label><input class="form-control form-control-sm ml-3 w-50" type="text" name="other_q6" placeholder="Your answer" id="other_q6_input" style="display: none;" disabled>
+                    </div>
+                    <hr class="my-4">
+
+                <h4>How do you currently find other pet owners for socializing or playdates? <span style="color:red">*</span></h4>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer7" value="Social media groups" id="radioDefault24" required="required">
+                        <label class="form-check-label" for="radioDefault24">Social media groups</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer7" value="Pet-related apps/websites" id="radioDefault25">
+                        <label class="form-check-label" for="radioDefault25">Pet-related apps/websites</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer7" value="In-person meetups/events" id="radioDefault26">
+                        <label class="form-check-label" for="radioDefault26">In-person meetups/events</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer7" value="Others" id="radioDefault27">
+                        <label class="form-check-label" for="radioDefault27"> Others </label>
+                        <label for="other_q7_input"></label><input class="form-control form-control-sm ml-3 w-50" type="text" name="other_q7" placeholder="Your answer" id="other_q7_input" style="display: none;" disabled>
+                    </div>
+                    <hr class="my-4">
+
+                <h4>Have you ever experienced difficulty in adopting a pet or finding trustworthy adoption listings? What was the biggest barrier? <span style="color:red">*</span></h4>
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="Leave a comment here" name="answer8" id="floatingTextarea1" required="required"></textarea>
+                        <label for="floatingTextarea1">Your answer</label>
+                    </div>
+                <hr class="my-4">
+
+                <h4>Would you prefer a platform that centralizes all pet-related services and community engagement? Why or why not? <span style="color:red">*</span></h4>
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="Leave a comment here" name="answer9" id="floatingTextarea2" required="required"></textarea>
+                        <label for="floatingTextarea2">Your answer</label>
+                    </div>
+                <hr class="my-4">
+
+                <div id="group3">
+                <h4>What features would you want most in a platform dedicated to pets? (Select top 3)  <span style="color:red">*</span></h4>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer10" value="Personalized pet profiles" id="checkDefault20">
+                            <label class="form-check-label" for="checkDefault20">Personalized pet profiles</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer10" value="Local pet services directory (vet, groomers, etc.)" id="checkDefault21">
+                            <label class="form-check-label" for="checkDefault21">Local pet services directory (vet, groomers, etc.)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer10" value="Pet playdate matchmaking" id="checkDefault22">
+                            <label class="form-check-label" for="checkDefault22">Pet playdate matchmaking</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer10" value="Pet adoption listings" id="checkDefault23">
+                            <label class="form-check-label" for="checkDefault23">Pet adoption listings</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer10" value="Emotional support for pet loss" id="checkDefault24">
+                            <label class="form-check-label" for="checkDefault24">Emotional support for pet loss</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer10" value="Community forums for pet care advice" id="checkDefault25">
+                            <label class="form-check-label" for="checkDefault24">Community forums for pet care advice</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer10" value="Marketplace for pet products" id="checkDefault26">
+                            <label class="form-check-label" for="checkDefault26">Marketplace for pet products</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer10" value="Pet challenges & contests" id="checkDefault27">
+                            <label class="form-check-label" for="checkDefault27">Pet challenges & contests</label>
+                    </div>
+
+                </div>
+                    <hr class="my-4">
+
+                <h4>Would you be willing to pay for premium features on a pet social platform? <span style="color:red">*</span></h4>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer11" value="Yes" id="radioDefault28" required="required">
+                        <label class="form-check-label" for="radioDefault28">Yes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer11" value="No" id="radioDefault29">
+                        <label class="form-check-label" for="radioDefault29">No</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer11" value="Maybe, depending on featuresIf yes, what premium features would you find valuable?" id="radioDefault30">
+                        <label class="form-check-label" for="radioDefault30">Maybe, depending on featuresIf yes, what premium features would you find valuable?</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer11" value="Others" id="radioDefault31">
+                        <label class="form-check-label" for="radioDefault31"> Others </label>
+                        <label for="other_q7_input"></label><input class="form-control form-control-sm ml-3 w-50" type="text" name="other_q11" placeholder="Your answer" id="other_q11_input" style="display: none;" disabled>
+                    </div>
+                    <hr class="my-4">
+<!--                <p id="error" style="color:red; display:none;">Please select at least one option for Checkbox.</p>-->
+
+                <div class="submit-buttons">
+                    <button type="submit" class="btn btn-outline-success">Submit</button>
+                    <a type="button" class="btn btn-outline-warning" href="{{ url_for('home') }}">Clear Responses</a>
+                </div>
+            </form>
+        </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+    <script src="./static/js/disable.js"></script>
+
+
+    </body>
+
+    <footer class="py-3 my-4">
+        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+<!--            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Home</a></li>-->
+
+        </ul> <p class="text-center text-body-secondary">© 2025 CYK</p>
+    </footer>
+</html>
